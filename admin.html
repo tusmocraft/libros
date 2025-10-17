@@ -1,56 +1,27 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin - Biblioteca Tusmocraft</title>
-<link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <title>Panel Admin | Biblioteca Tusmocraft</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<header class="header">
-  <div class="header-inner">
-    <div class="logo">BT</div>
-    <h1>Biblioteca Tusmocraft · Panel Admin</h1>
+<body class="admin">
+  <div id="login">
+    <h2>🔐 Iniciar sesión</h2>
+    <input id="user" type="text" placeholder="Usuario">
+    <input id="pass" type="password" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <p id="msg"></p>
   </div>
-</header>
 
-<main class="container">
-  <div class="card">
-    <div id="login-area">
-      <p>Ingresa tus credenciales para acceder al panel.</p>
-      <div class="login">
-        <input id="user" type="text" placeholder="Usuario">
-        <input id="pass" type="password" placeholder="Contraseña">
-        <button id="btnLogin">Entrar</button>
-      </div>
-      <p class="small">Usuario: <strong>tusmocraft</strong> • Contraseña: <strong>01tusmo02</strong></p>
-    </div>
-
-    <div id="panel" class="hidden">
-      <div class="topbar">
-        <div>
-          <strong>Bienvenido, Tusmocraft</strong>
-          <div class="muted">Panel administrativo · Lista de libros en /pdfs</div>
-        </div>
-        <div class="actions-top">
-          <button id="btnRefresh">Refrescar lista</button>
-          <button id="btnLogout">Cerrar sesión</button>
-        </div>
-      </div>
-
-      <div id="listArea">
-        <table id="booksTable">
-          <thead><tr><th>ID</th><th>Título</th><th>Archivo</th><th>Acciones</th></tr></thead>
-          <tbody></tbody>
-        </table>
-        <p id="emptyNote" class="muted" style="display:none">No hay libros registrados en books.json.</p>
-      </div>
-
-      <div class="note">Nota: Para que los libros aparezcan automáticamente, mantén actualizado <code>/pdfs/books.json</code>. El botón <em>Copiar Embed</em> generará el iframe listo para Weebly.</div>
-    </div>
+  <div id="panel" style="display:none;">
+    <h1>📚 Biblioteca Tusmocraft</h1>
+    <table id="bookTable">
+      <thead><tr><th>ID</th><th>Título</th><th>Enlace</th><th>Embed</th></tr></thead>
+      <tbody></tbody>
+    </table>
   </div>
-</main>
 
-<script src="/js/admin.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>

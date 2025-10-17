@@ -2,26 +2,201 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Panel Admin | Biblioteca Tusmocraft</title>
+  <title>📚 Panel Admin | Biblioteca Tusmocraft</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #b3e5fc, #e1f5fe);
+      color: #003c8f;
+      text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box, .panel-box {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      width: 90%;
+      max-width: 500px;
+      transition: 0.3s ease;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2 {
+      color: #0277bd;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #03a9f4;
+      border-radius: 10px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #0288d1;
+      box-shadow: 0 0 5px #03a9f4;
+    }
+
+    button {
+      background: #0288d1;
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+    button:hover { background: #0277bd; transform: scale(1.05); }
+
+    #msg {
+      color: red;
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    th {
+      background: #03a9f4;
+      color: white;
+      padding: 10px;
+      border-radius: 10px 10px 0 0;
+    }
+
+    td {
+      background: #e1f5fe;
+      padding: 10px;
+      border-bottom: 2px solid #bbdefb;
+    }
+
+    textarea {
+      width: 100%;
+      height: 70px;
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      resize: none;
+      background: #f3f9ff;
+      color: #01579b;
+    }
+
+    .copy-btn {
+      background: #4caf50;
+      margin-top: 5px;
+      padding: 5px 15px;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover { background: #43a047; }
+
+    .logout {
+      background: #f44336;
+      position: fixed;
+      top: 15px;
+      right: 15px;
+    }
+    .logout:hover { background: #e53935; }
+  </style>
 </head>
-<body class="admin">
-  <div id="login">
-    <h2>🔐 Iniciar sesión</h2>
-    <input id="user" type="text" placeholder="Usuario">
-    <input id="pass" type="password" placeholder="Contraseña">
-    <button onclick="login()">Entrar</button>
+<body>
+  <!-- LOGIN -->
+  <div class="login-box" id="loginBox">
+    <h2>🔐 Acceso al panel</h2>
+    <input id="user" type="text" placeholder="Usuario"><br>
+    <input id="pass" type="password" placeholder="Contraseña"><br>
+    <button onclick="login()">Ingresar</button>
     <p id="msg"></p>
   </div>
 
-  <div id="panel" style="display:none;">
-    <h1>📚 Biblioteca Tusmocraft</h1>
-    <table id="bookTable">
-      <thead><tr><th>ID</th><th>Título</th><th>Enlace</th><th>Embed</th></tr></thead>
-      <tbody></tbody>
+  <!-- PANEL -->
+  <div class="panel-box" id="panelBox" style="display:none;">
+    <h1>📖 Biblioteca Tusmocraft</h1>
+    <button class="logout" onclick="logout()">Cerrar sesión</button>
+
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Título</th><th>Ver</th><th>Embed</th></tr>
+      </thead>
+      <tbody id="bookTable"></tbody>
     </table>
   </div>
 
-  <script src="admin.js"></script>
+  <script>
+    const USER = "tusmocraft";
+    const PASS = "01tusmo02";
+
+    function login() {
+      const u = document.getElementById('user').value;
+      const p = document.getElementById('pass').value;
+      const msg = document.getElementById('msg');
+      if (u === USER && p === PASS) {
+        msg.textContent = '';
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('panelBox').style.display = 'block';
+        loadBooks();
+      } else {
+        msg.textContent = '❌ Usuario o contraseña incorrecta.';
+      }
+    }
+
+    function logout() {
+      document.getElementById('panelBox').style.display = 'none';
+      document.getElementById('loginBox').style.display = 'block';
+    }
+
+    async function loadBooks() {
+      const res = await fetch("books.json");
+      const data = await res.json();
+      const table = document.getElementById('bookTable');
+      table.innerHTML = '';
+
+      data.forEach(b => {
+        const tr = document.createElement('tr');
+        const embedCode = `<iframe src='viewer.html?id=${b.id}' width='100%' height='600' style='border:none;'></iframe>`;
+        tr.innerHTML = `
+          <td>${b.id}</td>
+          <td>${b.title}</td>
+          <td><a href="viewer.html?id=${b.id}" target="_blank">🔗 Ver</a></td>
+          <td>
+            <textarea readonly>${embedCode}</textarea><br>
+            <button class="copy-btn" onclick="copyEmbed(this)">Copiar</button>
+          </td>`;
+        table.appendChild(tr);
+      });
+    }
+
+    function copyEmbed(btn) {
+      const text = btn.previousElementSibling;
+      text.select();
+      document.execCommand("copy");
+      btn.textContent = "✅ Copiado";
+      setTimeout(() => (btn.textContent = "Copiar"), 1500);
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visor - Biblioteca Tusmocraft</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.viewer-wrap{max-width:1100px;margin:18px auto;padding:12px}
+.flip-area{width:100%;height:80vh;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(0,0,0,0.06);position:relative;overflow:hidden}
+.fallback-iframe{width:100%;height:100%;border:0}
+.notice{margin-top:10px;color:#345}
+</style>
+</head>
+<body>
+<header class="header small">
+  <div class="header-inner">
+    <div class="logo">BT</div>
+    <h1>Visor de PDF</h1>
+  </div>
+</header>
+
+<main class="viewer-wrap">
+  <div id="flipArea" class="flip-area">
+    <!-- Aquí se montará el flipbook si la librería está disponible -->
+    <iframe id="pdfFrame" class="fallback-iframe" src="" title="Visor PDF"></iframe>
+  </div>
+  <div class="notice">Si el flipbook 3D no carga, se mostrará una vista embebida como respaldo. Para efecto 3D real, coloca el archivo <strong>/js/flipbook.min.js</strong> (librería 3D FlipBook) en el directorio /js/.</div>
+</main>
+
+<script>
+function supportsFlipLibrary(){
+  return typeof window.FlipBook !== 'undefined' || typeof window.$.fn.flipBook === 'function' || false;
+}
+
+const params = new URLSearchParams(location.search);
+const file = params.get('file');
+if(!file){
+  document.getElementById('pdfFrame').src = '';
+} else {
+  const decoded = decodeURIComponent(file);
+  const url = `/pdfs/${decoded}`;
+  // Intentamos usar la librería; si no existe, mostramos iframe
+  if(supportsFlipLibrary()){
+    // Iniciar flipbook (código de ejemplo - dependerá de la librería real)
+    try{
+      // Este bloque se ejecutará si la librería está presente.
+      // Librerías distintas tienen APIs distintas; este es un placeholder.
+      const container = document.getElementById('flipArea');
+      container.innerHTML = '<div id="flipbook"></div>';
+      // Ejemplo de inicialización (ajusta según la librería que uses):
+      if(window.FlipBook && typeof window.FlipBook === 'function'){
+        new FlipBook({container:'#flipbook', pdf:url, width:'100%', height:'100%'});
+      } else if(window.$ && $.fn.flipBook) {
+        $('#flipbook').flipBook({pdf:url});
+      } else {
+        // Si la librería no tiene la API esperada, fallback
+        document.getElementById('pdfFrame').src = url;
+      }
+    }catch(e){
+      console.warn('Error iniciando flipbook',e);
+      document.getElementById('pdfFrame').src = url;
+    }
+  } else {
+    document.getElementById('pdfFrame').src = url;
+  }
+}
+</script>
+</body>
+</html>

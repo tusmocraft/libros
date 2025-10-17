@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Biblioteca Tusmocraft</title>
+<style>
+:root{--bg:#eaf6ff;--card:#ffffff;--accent:#7fb8ff;--text:#123049}
+body{font-family:Inter, system-ui, Arial; margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,var(--bg),#dff3ff);}
+.card{width:min(820px,92vw); background:var(--card); padding:40px; border-radius:14px; box-shadow:0 10px 30px rgba(18,48,73,0.08); border:4px dashed rgba(127,184,255,0.25); text-align:center}
+h1{color:var(--text); margin:0 0 10px; font-size:28px}
+p{color:rgba(18,48,73,0.85); margin:0 0 18px}
+.denied{display:inline-block;padding:12px 20px;border-radius:10px;background:linear-gradient(90deg,#ffd7d7,#ffdfe3); color:#8b0000; font-weight:700}
+.small{font-size:13px;color:#456}
+.admin-link{display:inline-block;margin-top:18px;padding:10px 14px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-weight:600;box-shadow:0 6px 14px rgba(127,184,255,0.24);}
+.note{margin-top:18px;font-size:13px;color:#2a5672}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Biblioteca Tusmocraft</h1>
+    <p class="small">Esta página está protegida. Para ver la biblioteca <span class="denied">ACCESO DENEGADO</span></p>
+    <a class="admin-link" href="/admin.html">Acceder al panel de administración</a>
+    <p class="note">Si eres el administrador, entra al panel e inicia sesión con tus credenciales.</p>
+  </div>
+</body>
+</html>
